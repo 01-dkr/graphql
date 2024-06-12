@@ -39,7 +39,6 @@ const drawCircularDiagram = (values) => {
 
 const drawCurveDiagram = (data) => {
     const svgWidth = 250;
-    const svgHeight = 60;
     const chartHeight = 40; // height available for the chart within the SVG
     const padding = 10; // padding around the chart
     const maxGrade = Math.max(...data.map(d => d.grade));

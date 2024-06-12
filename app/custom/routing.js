@@ -5,7 +5,6 @@ export { surfTo };
 
 async function homePage() {
     const info = await getData();
-    console.log(info);
 
     // Formatting "the amount XP" value.
     let amountXP = info.user.transactions_aggregate.aggregate.sum.amount;
