@@ -190,7 +190,6 @@ const loginPage = () => {
 }
 
 const surfTo = path => {
-    console.log(path);
     const route = routes.find(element => element.path === path)
     if (route) {
         if (route.path === '/home' && !localStorage.getItem('client-token')) errorPage('Task not allowed.', 405);

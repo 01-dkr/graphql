@@ -24,7 +24,6 @@ async function getData() {
     }).then(response => response.json())
         .then(output => {
             if (output.data.user.length > 0) {
-                console.log(output.data.user[0]);
                 return {
                     userId: output.data.user[0].id,
                     name: output.data.user[0].login,
