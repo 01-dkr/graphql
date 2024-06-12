@@ -12,6 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     surfTo(window.location.pathname);
 });
 
-document.addEventListener('popstate', () => {
+window.addEventListener('popstate', () => {
     surfTo(window.location.pathname);
 });

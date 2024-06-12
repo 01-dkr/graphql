@@ -1,5 +1,5 @@
 import { getData } from "./handlers.js";
-import { drawCircularDiagram } from "./helpers.js";
+import { drawCircularDiagram, drawCurveDiagram } from "./helpers.js";
 
 export { surfTo };
 
@@ -63,7 +63,6 @@ async function homePage() {
                             <circle cx="125" cy="125" r="100" fill="#ccc" />
                             <path id="done-segment" fill="#89fc00" />
                             <path id="in-progress-segment" fill="#ff9b24" />
-
                             <!-- Legend -->
                             <text x="260" y="30" font-family="Arial" font-size="1.4rem" fill="#89fc00">Done</text>
                             <rect x="240" y="16" width="12" height="12" fill="#89fc00"/>
@@ -83,14 +82,21 @@ async function homePage() {
 
                     <div class="graph">
                         <svg viewBox="0 0 250 60" width="100%" height="75%">
-                            <path d="M 209.328 17.34 C 221.956 17.588 235.264 32.599 250 22.328" fill="none" vector-effect="non-scaling-stroke" stroke-width="2" stroke="rgb(243,243,250)" stroke-linejoin="miter" stroke-linecap="round" stroke-miterlimit="3"/>
-                            <linearGradient id="_lgradient_2" x1="0%" y1="50%" x2="100%" y2="50%">
-                                <stop offset="0%" stop-opacity="1" style="stop-color:rgb(248, 135, 129)"/>
-                                <stop offset="100%" stop-opacity="1" style="stop-color:rgb(247, 198, 130)"/>
-                            </linearGradient>
-                            <path d="M 0 43.634 C 5.934 43.634 11.318 51.209 17.462 51.342 C 33.219 51.683 30.603 59.567 39.187 59.868 C 46.963 60.141 50.44 44.192 60.537 43.77 C 69.126 43.77 72.129 52.461 79.739 52.433 C 90.904 52.433 94.93 38.455 106.648 39.78 C 129.082 42.317 124.556 27.606 139.157 27.177 C 153.758 26.747 158.235 44.485 171.96 44.725 C 196.438 45.155 189.782 17.1 208.248 17.1" fill="none" vector-effect="non-scaling-stroke" stroke-width="2" stroke="url(#_lgradient_2)" stroke-linejoin="miter" stroke-linecap="round" stroke-miterlimit="3"/>
-                            <path d="M 206.649 17.218 C 206.649 15.739 207.85 14.538 209.328 14.538 C 210.807 14.538 212.008 15.739 212.008 17.218 C 212.008 18.696 210.807 19.897 209.328 19.897 C 207.85 19.897 206.649 18.696 206.649 17.218 Z" fill="rgb(247, 198, 130)"/>
-                            <text transform="matrix(1,0,0,1,195,5)" style="font-family:&quot;Open Sans&quot;;font-weight:700;font-size:12px;font-style:normal;fill:rgb(247, 198, 130);stroke:none;">+14%</text>
+                            <defs>
+                                <linearGradient id="_lgradient_2" x1="0%" y1="50%" x2="100%" y2="50%">
+                                    <stop offset="0%" stop-opacity="1" style="stop-color:rgb(248, 135, 129)" />
+                                    <stop offset="100%" stop-opacity="1" style="stop-color:rgb(247, 198, 130)" />
+                                </linearGradient>
+                            </defs>
+                            <path id="variation-curve" fill="none" vector-effect="non-scaling-stroke" stroke-width="2" stroke="url(#_lgradient_2)" stroke-linejoin="miter" stroke-linecap="round" stroke-miterlimit="3" />
+                            <!-- Hover text elements -->
+                            <text id="hover-group-text" x="0" y="0" visibility="hidden" style="font-family:'Open Sans'; font-weight:700; font-size:12px; fill:rgb(247, 198, 130); stroke:none;"></text>
+                            <text id="hover-captain-text" x="0" y="0" visibility="hidden" style="font-family:'Open Sans'; font-weight:700; font-size:12px; fill:rgb(247, 198, 130); stroke:none;"></text>
+                            <text id="hover-grade-text" x="0" y="0" visibility="hidden" style="font-family:'Open Sans'; font-weight:700; font-size:12px; fill:rgb(247, 198, 130); stroke:none;"></text>
+                            <!-- Hover bullet -->
+                            <circle id="hover-bullet" cx="0" cy="0" r="3" fill="rgb(247, 198, 130)" visibility="hidden"></circle>
+                            <!-- Circles for hover detection -->
+                            <g id="hover-points"></g>
                         </svg>
                         <div class="stock">
                             <div class="stock-logo dandruft">
@@ -151,6 +157,7 @@ async function homePage() {
     document.body.append(area);
 
     drawCircularDiagram([info.user.projectsFinished.aggregate.count, info.user.projectsInProgress.aggregate.count]);
+    drawCurveDiagram(info.user.audits);
 }
 
 const errorPage = (message, status) => {
@@ -184,6 +191,7 @@ const loginPage = () => {
 }
 
 const surfTo = path => {
+    console.log(path);
     const route = routes.find(element => element.path === path)
     if (route) {
         if (route.path === '/home' && !localStorage.getItem('client-token')) errorPage('Task not allowed.', 405);
