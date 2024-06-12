@@ -11,3 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     surfTo(window.location.pathname);
 });
+
+document.addEventListener('popstate', () => {
+    surfTo(window.location.pathname);
+});
