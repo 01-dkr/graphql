@@ -102,8 +102,8 @@ async function homePage() {
                                 <i class="fa fa-inverse fa-circle-thin"></i>
                             </div>
                             <div class="stock-info">
-                                <div class="stock-name">DDFT</div>
-                                <div class="stock-fullname">Dandruft Craft</div>
+                                <div class="stock-name">AUDITS RATIO</div>
+                                <div class="stock-fullname">Variation curve</div>
                             </div>
                         </div>
                     </div>
